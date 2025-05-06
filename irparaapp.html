@@ -46,25 +46,17 @@
     </style>
     <script type="text/javascript">
         function detectarOSERedirecionar() {
-            // --- INÍCIO DA CONFIGURAÇÃO - SUBSTITUA PELOS SEUS LINKS REAIS ---
-            var linkAppStoreIOS = "https://apps.apple.com/br/app/revonutri/id6504949527"; // Ex: https://apps.apple.com/br/app/seu-app/id123456789
-            var linkGooglePlayAndroid = "https://play.google.com/store/apps/details?id=com.gustavoabdo.revonutri&pcampaignid=web_share"; // Ex: https://play.google.com/store/apps/details?id=com.seu.pacote
-            var linkFallback = "https://gustavosabdo.github.io/revonutri.github.io/"; // Link para sua página principal ou outra página de fallback
+            // --- INÍCIO DA CONFIGURAÇÃO - SEUS LINKS REAIS ESTÃO AQUI ---
+            var linkAppStoreIOS = "https://apps.apple.com/br/app/revonutri/id6504949527"; 
+            var linkGooglePlayAndroid = "https://play.google.com/store/apps/details?id=com.gustavoabdo.revonutri&pcampaignid=web_share"; 
+            var linkFallback = "https://gustavosabdo.github.io/revonutri.github.io/"; 
             // --- FIM DA CONFIGURAÇÃO ---
 
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Verifica se os links de placeholder foram substituídos
-            if (linkAppStoreIOS === "https://apps.apple.com/br/app/revonutri/id6504949527" || linkGooglePlayAndroid === "https://play.google.com/store/apps/details?id=com.gustavoabdo.revonutri&pcampaignid=web_share") {
-                console.error("ATENÇÃO: Configure os links da App Store e Google Play no script!");
-                document.getElementById("status").innerHTML = "Erro de configuração: links da loja não definidos no script.";
-                // Exibe os links de fallback caso não configurado, para facilitar o clique manual
-                document.getElementById("link-ios").href = linkAppStoreIOS;
-                document.getElementById("link-android").href = linkGooglePlayAndroid;
-                document.getElementById("fallback-links").style.display = "block";
-                return;
-            }
+            // A VERIFICAÇÃO PROBLEMÁTICA FOI REMOVIDA DESTA PARTE DO CÓDIGO.
             
+            // Atualiza os links visíveis na página para o caso de não haver redirecionamento imediato
             document.getElementById("link-ios").href = linkAppStoreIOS;
             document.getElementById("link-android").href = linkGooglePlayAndroid;
 
@@ -76,14 +68,14 @@
                 window.location.replace(linkGooglePlayAndroid);
             } else {
                 // Não é iOS nem Android, ou não conseguiu detectar com certeza
-                // Pode redirecionar para uma página de informações do app, para seu site principal,
-                // ou simplesmente não fazer nada e deixar os links visíveis na página.
-                // A configuração atual redireciona para o linkFallback.
-                // Se preferir que nada aconteça e apenas os links apareçam, comente a linha abaixo.
-                // window.location.replace(linkFallback);
+                // Mostra mensagem e links para escolha manual.
                 document.getElementById("status").innerHTML = "Não foi possível detectar seu sistema automaticamente. Por favor, escolha sua loja abaixo:";
-                document.getElementById("loader").style.display = "none"; // Esconde o loader
-                document.getElementById("fallback-links").style.display = "block"; // Mostra os links manuais
+                if(document.getElementById("loader")) { // Verifica se o loader existe antes de tentar modificar
+                    document.getElementById("loader").style.display = "none"; // Esconde o loader
+                }
+                if(document.getElementById("fallback-links")) { // Verifica se o container de links existe
+                    document.getElementById("fallback-links").style.display = "block"; // Mostra os links manuais
+                }
             }
         }
 
