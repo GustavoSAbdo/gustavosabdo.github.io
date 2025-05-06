@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecionando para a loja...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript">
+        function detectarOSERedirecionar() {
+            // --- INÍCIO DA CONFIGURAÇÃO - SUBSTITUA PELOS SEUS LINKS REAIS ---
+            var linkAppStoreIOS = "https://apps.apple.com/br/app/revonutri/id6504949527"; // Ex: https://apps.apple.com/br/app/seu-app/id123456789
+            var linkGooglePlayAndroid = "https://play.google.com/store/apps/details?id=com.gustavoabdo.revonutri&pcampaignid=web_share"; // Ex: https://play.google.com/store/apps/details?id=com.seu.pacote
+            var linkFallback = "https://gustavosabdo.github.io/revonutri.github.io/"; // Link para sua página principal ou outra página de fallback
+            // --- FIM DA CONFIGURAÇÃO ---
+
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Verifica se os links de placeholder foram substituídos
+            if (linkAppStoreIOS === "https://apps.apple.com/br/app/revonutri/id6504949527" || linkGooglePlayAndroid === "https://play.google.com/store/apps/details?id=com.gustavoabdo.revonutri&pcampaignid=web_share") {
+                console.error("ATENÇÃO: Configure os links da App Store e Google Play no script!");
+                document.getElementById("status").innerHTML = "Erro de configuração: links da loja não definidos no script.";
+                // Exibe os links de fallback caso não configurado, para facilitar o clique manual
+                document.getElementById("link-ios").href = linkAppStoreIOS;
+                document.getElementById("link-android").href = linkGooglePlayAndroid;
+                document.getElementById("fallback-links").style.display = "block";
+                return;
+            }
+            
+            document.getElementById("link-ios").href = linkAppStoreIOS;
+            document.getElementById("link-android").href = linkGooglePlayAndroid;
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                // É iOS
+                window.location.replace(linkAppStoreIOS);
+            } else if (/android/i.test(userAgent)) {
+                // É Android
+                window.location.replace(linkGooglePlayAndroid);
+            } else {
+                // Não é iOS nem Android, ou não conseguiu detectar com certeza
+                // Pode redirecionar para uma página de informações do app, para seu site principal,
+                // ou simplesmente não fazer nada e deixar os links visíveis na página.
+                // A configuração atual redireciona para o linkFallback.
+                // Se preferir que nada aconteça e apenas os links apareçam, comente a linha abaixo.
+                // window.location.replace(linkFallback);
+                document.getElementById("status").innerHTML = "Não foi possível detectar seu sistema automaticamente. Por favor, escolha sua loja abaixo:";
+                document.getElementById("loader").style.display = "none"; // Esconde o loader
+                document.getElementById("fallback-links").style.display = "block"; // Mostra os links manuais
+            }
+        }
+
+        // Chama a função quando a página terminar de carregar
+        window.onload = detectarOSERedirecionar;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="loader" class="loader"></div>
+        <p id="status">Redirecionando para a loja de aplicativos apropriada...</p>
+        <div id="fallback-links" style="display: none;">
+            <p>Se o redirecionamento não funcionar, clique abaixo:</p>
+            <p><a id="link-ios" href="#">Baixar na App Store (iOS)</a></p>
+            <p><a id="link-android" href="#">Disponível no Google Play (Android)</a></p>
+        </div>
+    </div>
+</body>
+</html>
